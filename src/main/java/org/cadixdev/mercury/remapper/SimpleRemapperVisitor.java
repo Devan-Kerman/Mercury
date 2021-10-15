@@ -25,18 +25,19 @@ import org.cadixdev.lorenz.model.MethodParameterMapping;
 import org.cadixdev.mercury.RewriteContext;
 import org.cadixdev.mercury.analysis.MercuryInheritanceProvider;
 import org.cadixdev.mercury.util.GracefulCheck;
-import org.eclipse.jdt.core.dom.ASTNode;
-import org.eclipse.jdt.core.dom.ASTVisitor;
-import org.eclipse.jdt.core.dom.Block;
-import org.eclipse.jdt.core.dom.IBinding;
-import org.eclipse.jdt.core.dom.IMethodBinding;
-import org.eclipse.jdt.core.dom.ITypeBinding;
-import org.eclipse.jdt.core.dom.IVariableBinding;
-import org.eclipse.jdt.core.dom.LambdaExpression;
-import org.eclipse.jdt.core.dom.MethodDeclaration;
-import org.eclipse.jdt.core.dom.SimpleName;
-import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
-import org.eclipse.jdt.core.dom.VariableDeclaration;
+import org.cadixdev.mercury.jdt.core.dom.ASTNode;
+import org.cadixdev.mercury.jdt.core.dom.ASTVisitor;
+import org.cadixdev.mercury.jdt.core.dom.Block;
+import org.cadixdev.mercury.jdt.core.dom.IBinding;
+import org.cadixdev.mercury.jdt.core.dom.IMethodBinding;
+import org.cadixdev.mercury.jdt.core.dom.ITypeBinding;
+import org.cadixdev.mercury.jdt.core.dom.IVariableBinding;
+import org.cadixdev.mercury.jdt.core.dom.LambdaExpression;
+import org.cadixdev.mercury.jdt.core.dom.MethodDeclaration;
+import org.cadixdev.mercury.jdt.core.dom.SimpleName;
+import org.cadixdev.mercury.jdt.core.dom.SingleVariableDeclaration;
+import org.cadixdev.mercury.jdt.core.dom.VariableDeclaration;
+import org.cadixdev.mercury.jdt.internal.compiler.lookup.PackageBinding;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -248,10 +249,6 @@ class SimpleRemapperVisitor extends ASTVisitor {
      */
     private void checkLocalVariable(SimpleName node, IVariableBinding binding) {
         final ASTNode bindingNode = this.context.getCompilationUnit().findDeclaringNode(binding);
-        if (this.context.getMercury().isGracefulClasspathChecks() && bindingNode == null) {
-            return;
-        }
-
         final String localVariableName = (String) bindingNode.getProperty(LOCAL_VARIABLE_NAME_PROPERTY);
         if (localVariableName != null) {
             updateIdentifier(node, localVariableName);

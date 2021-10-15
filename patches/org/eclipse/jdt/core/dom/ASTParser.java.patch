@@ -1,0 +1,20 @@
+--- a/org/eclipse/jdt/core/dom/ASTParser.java
++++ b/org/eclipse/jdt/core/dom/ASTParser.java
+@@ -201,6 +201,7 @@
+ 	 * Classpath entries to use to resolve bindings when no java project are available.
+ 	 */
+ 	private String[] classpaths;
++	public List<Classpath> customClasspaths;
+ 
+ 	/**
+ 	 * Sourcepath entries to use to resolve bindings when no java project are available.
+@@ -235,6 +236,9 @@
+ 	private List<Classpath> getClasspath() throws IllegalStateException {
+ 		Main main = new Main(new PrintWriter(System.out), new PrintWriter(System.err), false/*systemExit*/, null/*options*/, null/*progress*/);
+ 		ArrayList<Classpath> allClasspaths = new ArrayList<Classpath>();
++		if(this.customClasspaths != null) {
++			allClasspaths.addAll(this.customClasspaths);
++		}
+ 		try {
+ 			if ((this.bits & CompilationUnitResolver.INCLUDE_RUNNING_VM_BOOTCLASSPATH) != 0) {
+ 				org.eclipse.jdt.internal.compiler.util.Util.collectRunningVMBootclasspath(allClasspaths);

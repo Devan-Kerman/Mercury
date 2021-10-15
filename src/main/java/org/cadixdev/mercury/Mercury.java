@@ -10,13 +10,14 @@
 
 package org.cadixdev.mercury;
 
-import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jdt.core.dom.AST;
-import org.eclipse.jdt.core.dom.ASTParser;
-import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.eclipse.jdt.core.dom.FileASTRequestor;
-import org.eclipse.jdt.core.dom.IBinding;
-import org.eclipse.jdt.core.dom.ITypeBinding;
+import org.cadixdev.mercury.jdt.core.JavaCore;
+import org.cadixdev.mercury.jdt.core.dom.AST;
+import org.cadixdev.mercury.jdt.core.dom.ASTParser;
+import org.cadixdev.mercury.jdt.core.dom.CompilationUnit;
+import org.cadixdev.mercury.jdt.core.dom.FileASTRequestor;
+import org.cadixdev.mercury.jdt.core.dom.IBinding;
+import org.cadixdev.mercury.jdt.core.dom.ITypeBinding;
+import org.cadixdev.mercury.jdt.internal.compiler.batch.FileSystem;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -62,6 +63,7 @@ public final class Mercury {
     private final List<Path> sourcePath = new ArrayList<>();
 
     private final Map<Object, Object> context = new HashMap<>();
+    private List<FileSystem.Classpath> customClasspaths = new ArrayList<>();
     private Path sourceDir;
     private Path outputDir;
 
@@ -115,6 +117,10 @@ public final class Mercury {
 
     public List<Path> getSourcePath() {
         return this.sourcePath;
+    }
+
+    public List<FileSystem.Classpath> getCustomClasspaths() {
+        return this.customClasspaths;
     }
 
     public List<SourceProcessor> getProcessors() {
@@ -191,6 +197,7 @@ public final class Mercury {
 
     private void run() throws Exception {
         ASTParser parser = ASTParser.newParser(AST.JLS10);
+        parser.customClasspaths = this.customClasspaths;
 
         // Set Java version
         Map<String, String> options = JavaCore.getOptions();

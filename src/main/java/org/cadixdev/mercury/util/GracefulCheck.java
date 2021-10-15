@@ -11,9 +11,9 @@
 package org.cadixdev.mercury.util;
 
 import org.cadixdev.mercury.SourceContext;
-import org.eclipse.jdt.core.dom.ASTNode;
-import org.eclipse.jdt.core.dom.ITypeBinding;
-import org.eclipse.jdt.core.dom.Javadoc;
+import org.cadixdev.mercury.jdt.core.dom.ASTNode;
+import org.cadixdev.mercury.jdt.core.dom.ITypeBinding;
+import org.cadixdev.mercury.jdt.core.dom.Javadoc;
 
 /**
  * Utility for checking gracefully, based on configuration.

@@ -12,10 +12,10 @@ package org.cadixdev.mercury;
 
 import static org.cadixdev.mercury.Mercury.JAVA_EXTENSION;
 
-import org.cadixdev.mercury.jdt.rewrite.imports.ImportRewrite;
+import org.cadixdev.mercury.jdt.core.dom.rewrite.ImportRewrite;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
+import org.cadixdev.mercury.jdt.core.dom.CompilationUnit;
+import org.cadixdev.mercury.jdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.jface.text.Document;
 import org.eclipse.text.edits.MultiTextEdit;
 import org.eclipse.text.edits.TextEdit;

@@ -1,12 +1,15 @@
 import java.util.concurrent.Callable
 
+
+
 plugins {
     `java-library`
     signing
     `maven-publish`
-    id("uk.jamierocks.propatcher") version "1.3.2"
-    id("org.cadixdev.licenser") version "0.5.0"
+    id("uk.jamierocks.propatcher") version "2.0.0"
+    id("org.cadixdev.licenser") version "0.6.0" apply false
 }
+
 
 val artifactId = name.toLowerCase()
 base.archivesBaseName = artifactId
@@ -47,7 +50,7 @@ tasks.withType<Javadoc> {
 // Patched ImportRewrite from JDT
 patches {
     patches = file("patches")
-    root = file("build/jdt/original")
+    rootDir = file("build/jdt/original")
     target = file("build/jdt/patched")
 }
 val jdtSrcDir = file("jdt")
@@ -55,16 +58,14 @@ val jdtSrcDir = file("jdt")
 val extract = task<Copy>("extractJdt") {
     dependsOn(configurations["jdt"])
     from(Callable { zipTree(configurations["jdt"].singleFile) })
-    destinationDir = patches.root
+    destinationDir = patches.rootDir
 
-    include("org/eclipse/jdt/core/dom/rewrite/ImportRewrite.java")
-    include("org/eclipse/jdt/internal/core/dom/rewrite/imports/*.java")
+    include("org/eclipse/jdt/**/*.java")
 }
 tasks["applyPatches"].inputs.files(extract)
 
 val renames = listOf(
-        "org.eclipse.jdt.core.dom.rewrite" to "$group.$artifactId.jdt.rewrite.imports",
-        "org.eclipse.jdt.internal.core.dom.rewrite.imports" to "$group.$artifactId.jdt.internal.rewrite.imports"
+        "org.eclipse.jdt" to "$group.$artifactId.jdt",
 )
 
 fun createRenameTask(prefix: String, inputDir: File, outputDir: File, renames: List<Pair<String, String>>): Task
@@ -109,10 +110,10 @@ artifacts {
     add("archives", javadocJar)
 }
 
-license {
-    header = file("HEADER")
-    exclude("$group.$artifactId.jdt.".replace('.', '/'))
-}
+//license.apply {
+//    setHeader(file("HEADER"))
+//    exclude("$group.$artifactId.jdt.".replace('.', '/'))
+//}
 
 val isSnapshot = version.toString().endsWith("-SNAPSHOT")
 
@@ -190,3 +191,5 @@ tasks.withType<Sign> {
 }
 
 operator fun Property<String>.invoke(v: String) = set(v)
+
+apply(from = "MakePatchesTask_fixed.gradle")

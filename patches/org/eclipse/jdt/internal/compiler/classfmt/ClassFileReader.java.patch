@@ -1,0 +1,13 @@
+--- a/org/eclipse/jdt/internal/compiler/classfmt/ClassFileReader.java
++++ b/org/eclipse/jdt/internal/compiler/classfmt/ClassFileReader.java
+@@ -123,6 +123,10 @@
+ 
+ public static ClassFileReader read(InputStream stream, String fileName, boolean fullyInitialize) throws ClassFormatException, IOException {
+ 	byte classFileBytes[] = Util.getInputStreamAsByteArray(stream, -1);
++	return read(classFileBytes, fileName, fullyInitialize);
++}
++
++public static ClassFileReader read(byte[] classFileBytes, String fileName, boolean fullyInitialize) throws ClassFormatException {
+ 	ClassFileReader classFileReader = new ClassFileReader(classFileBytes, fileName.toCharArray());
+ 	if (fullyInitialize) {
+ 		classFileReader.initialize();
